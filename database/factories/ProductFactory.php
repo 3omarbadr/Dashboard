@@ -22,7 +22,7 @@ class ProductFactory extends Factory
         $i++;
         return [
             'name' => $this->faker->name(),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->word(),
             'price' => $this->faker->randomDigit(),
             'img' => "products/$i.png"
         ];

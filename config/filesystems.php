@@ -48,6 +48,12 @@ return [
             'url' => env('APP_URL').'/storage/cats',
             'visibility' => 'public',
         ],
+        'products' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/products'),
+            'url' => env('APP_URL').'/storage/products',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',
@@ -75,7 +81,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        // public_path('cats') => storage_path('app/cats'),
+        public_path('storage/cats') => storage_path('app/public/cats'),
+        public_path('storage/products') => storage_path('app/public/products'),
     ],
 
 ];

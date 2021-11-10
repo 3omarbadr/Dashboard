@@ -68,7 +68,7 @@ class CatController extends Controller
 
         if($request->hasFile('img')) {
             Storage::delete($path);
-            $path = Storage::putFile("cats", $request->file('img'));
+            Storage::disk('cats')->put('/',$request->file('img'));
         }
         $cat->update([
             'name' => json_encode([

@@ -80,12 +80,15 @@
             @yield('content')
         </main>
     </div>
-    {{-- {{$slot}}  --}}
+    {{$slot}} 
     @livewireScripts
 
     <script>
         window.livewire.on('productAdded', ()=>{
             $('#add-product').modal('hide');
+        })
+        window.livewire.on('productUpdated', ()=>{
+            $('#update-product').modal('hide');
         })
     </script>
 </body>
