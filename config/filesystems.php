@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'catsUploads'),
+    'default' => env('FILESYSTEM_DRIVER', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,20 +35,17 @@ return [
             'root' => storage_path('app'),
         ],
 
-        'links' => [
-            public_path('storage') => storage_path('app/public'),
-            public_path('images') => storage_path('app/images'),
-        ],
-
-        'uploads' => [
-            'driver' => 'local',
-            'root' => public_path('catsUploads'),
-        ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
+        'cats' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/cats'),
+            'url' => env('APP_URL').'/storage/cats',
             'visibility' => 'public',
         ],
 
@@ -78,6 +75,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        // public_path('cats') => storage_path('app/cats'),
     ],
 
 ];

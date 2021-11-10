@@ -35,11 +35,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="main-menu nav navbar-nav navbar-left text-bold" >
                 @if(App::getlocale()=="ar")
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('lang/set/en')}}">EN</a>
+                    <a class="nav-link" href="{{url('lang/set/en')}}">English</a>
                 </li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('lang/set/ar')}}">ع</a>
+                    <a class="nav-link" href="{{url('lang/set/ar')}}">العربية</a>
                 </li>
                 @endif
             </ul>

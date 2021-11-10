@@ -10,12 +10,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">{{__('web.cats')}}</h1>
+                    <h1 class="m-0 text-dark">{{__('web.users')}}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{url('dashboard')}}">{{__('web.home')}}</a></li>
-                        <li class="breadcrumb-item active">{{__('web.cats')}}</li>
+                        <li class="breadcrumb-item active">{{__('web.users')}}</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -32,10 +32,10 @@
             <div class="row">
                 <div class="col">
                     <div class="card-header">
-                        <h3 class="card-title">{{__('web.allcats')}}</h3>
+                        <h3 class="card-title">{{__('web.allusers')}}</h3>
 
                         <div class="card-tools">
-                            <button type="button" class="btn btn-small btn-primary" data-toggle="modal" data-target="#add-modal">Add Category</button>
+                            <button type="button" class="btn btn-small btn-primary" data-toggle="modal" data-target="#add-modal">Add User</button>
                         </div>
                     </div>
                 </div>
@@ -43,24 +43,30 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name (en)</th>
-                            <th>Name (ar)</th>
-                            <th>img</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Roles</th>
                             <th>Active</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    @foreach ($cats as $cat)
-                    <tbody id="cats-table">
+
+                    @foreach ($users as $key => $user)
+                    <tbody id="users-table">
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$cat->name('en')}}</td>
-                            <td>{{$cat->name('ar')}}</td>
+                            <td>{{$user->name}}</td>
+                            <td>{{$user->email}}</td>
                             <td>
-                                <img src="{{asset('storage/cats/'.$cat->img)}}" height="50px">
+                                @if(!empty($user->getRoleNames()))
+                                @foreach($user->getRoleNames() as $v)
+                                <label class="badge badge-success">{{ $v }}</label>
+                                @endforeach
+                                @endif
                             </td>
+                            
                             <td>
-                                @if($cat->active)
+                                @if($user->status)
 
                                 <span class="badge bg-success">yes</span>
                                 @else
@@ -70,9 +76,9 @@
                                 @endif
                             </td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-info edit-btn" data-id="{{$cat->id}}" data-name-en="{{$cat->name('en')}}" data-name-ar="{{$cat->name('ar')}}" data-img="{{$cat->img}}" data-toggle="modal" data-target="#edit-modal"><i class="fas fa-edit"></i></button>
-                                <a href="{{url("dashboard/cats/delete/$cat->id")}}" data-name-en="{{$cat->name('en')}}" data-name-ar="{{$cat->name('ar')}}" data-img="{{$cat->img}}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-                                <a href="{{url("dashboard/cats/toggle/$cat->id")}}" class="btn btn-sm btn-secondary"><i class="fas fa-toggle-on"></i></a>
+                                <button type="button" class="btn btn-sm btn-info edit-btn" data-id="{{$user->id}}" data-name="{{$user->name}}" data-email="{{$user->email}}" data-toggle="modal" data-target="#edit-modal"><i class="fas fa-edit"></i></button>
+                                <a href="{{url("dashboard/users/delete/$user->id")}}" data-name="{{$user->name}}" data-email="{{$user->email}}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                <a href="{{url("dashboard/users/toggle/$user->id")}}" class="btn btn-sm btn-secondary"><i class="fas fa-toggle-on"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -81,7 +87,7 @@
             </div>
             <div class="d-flex justify-content-center my-3">
 
-                {{$cats->links()}}
+                {{$users->links()}}
 
             </div>
         </div>
@@ -93,10 +99,10 @@
 <!-- /.content-wrapper -->
 
 <div class="modal fade " id="add-modal" aria-hidden="true" style="display:none" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-s">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Category</h4>
+                <h4 class="modal-title">Add User</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -105,40 +111,41 @@
                 <!-- form start -->
                 @include('admin.inc.errors')
 
-                <form method="POST" action="{{url("dashboard/cats/store")}}" enctype="multipart/form-data">
+                <form method="POST" action="{{url("dashboard/users/store")}}" id="add-form">
                 <!-- ajax -->
-                {{-- <form id="add-form" enctype="multipart/form-data"> --}}
+                {{-- <form id="add-form"> --}}
 
                     @csrf
                     <div class="row">
 
-                        <div class="col-6">
+                        <div class="col">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Name (en)</label>
-                                <input type="text" name="name_en" class="form-control">
+                                <label>Name</label>
+                                <input type="text" name="name" class="form-control">
                             </div>
                         </div>
-                        <div class="col-6">
+                    </div>
+                    <div class="row">
+
+                        <div class="col">
                             <div class="form-group">
-                                <label for="exampleInputPassword1">Name (ar)</label>
-                                <input type="text" name="name_ar" class="form-control">
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" id="add-form-email">
                             </div>
                         </div>
-                        <div class=" offset-3 col-6">
+                    </div>
+                    <div class="row">
+
+                        <div class="col">
                             <div class="form-group">
-                                <label>Image</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" name="img" class="custom-file-input">
-                                        <label class="custom-file-label">Choose file</label>
-                                    </div>
-                                </div>
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" id="add-form-btn"  class="btn btn-primary">Submit</button>
+                        <button type="submit" id="add-form-btn" form="add-form" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -152,7 +159,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Category</h4>
+                <h4 class="modal-title">Edit User</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -161,7 +168,7 @@
                 @include('admin.inc.errors')
 
                 <!-- form start -->
-                <form method="POST" action="{{url('dashboard/cats/update')}}" enctype="multipart/form-data" id="edit-form">
+                <form method="POST" action="{{url('dashboard/users/update')}}" enctype="multipart/form-data" id="edit-form">
 
                     @csrf
 
@@ -171,25 +178,17 @@
 
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Name (en)</label>
-                                <input type="text" name="name_en" class="form-control" id="edit-form-name-en">
+                                <label for="exampleInputEmail1">Name</label>
+                                <input type="text" name="name" class="form-control" id="edit-form-name">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="exampleInputPassword1">Name (ar)</label>
-                                <input type="text" name="name_ar" class="form-control" id="edit-form-name-ar">
-                            </div>
-                        </div>
-                        <div class=" offset-3 col-6">
-                            <div class="form-group">
-                                <label>Image</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="img" id="edit-form-img">
-                                        <label class="custom-file-label">Choose file</label>
-                                    </div>
-                                </div>
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" name="email" class="form-control" id="edit-form-email">
                             </div>
                         </div>
                     </div>
@@ -213,15 +212,13 @@
     $('.edit-btn').click(function() {
         // e.preventDefult()
         let id = $(this).attr('data-id')
-        let nameEn = $(this).attr('data-name-en')
-        let nameAr = $(this).attr('data-name-ar')
-        let img = $(this).attr('data-img')
+        let name = $(this).attr('data-name')
+        let email = $(this).attr('data-email')
 
         // console.log(id, nameAr, nameEn, img);
         $('#edit-form-id').val(id)
-        $('#edit-form-name-en').val(nameEn)
-        $('#edit-form-name-ar').val(nameAr)
-        // $('#edit-form-img').val(img)
+        $('#edit-form-name').val(name)
+        $('#edit-form-email').val(email)
     })
 </script>
 
@@ -238,17 +235,17 @@
 
         $.ajax({
             type: "POST",
-            url: "{{route('cats.store')}}",
+            url: "{{route('users.store')}}",
             data: formData,
             contentType: false,
             processData: false,
 
-            success: function(text) {
+            success: function(data) {
                 $('#success-div').show();
-                $('#success-div').text(text.success);
+                $('#success-div').text(data.success);
                 $('#add-modal').modal('hide');
-                // $('#cats-table tbody:last-child').append("<tr><td>{{$cat->name('en')}}</td><td>{{$cat->name('ar')}}</td><td><img src='{{asset('$cat->img')}}' height='50px'></td></tr>");
-                $('#cats-table').append("<tr><td>{{$cat->id}}</td><td>data.name('en')}}</td><td>{{$cat->name('ar')}}</td><td><img src='{{asset('$cat->img')}}' height='50px'></td><td>@if($cat->active)<span class='badge bg-success'>yes</span>@else<span class='badge bg-danger'>no</span>@endif</td><td><button type='button' class='btn btn-sm btn-info edit-btn' data-id='{{$cat->id}}' data-name-en='{{$cat->name('en')}}' data-name-ar='{{$cat->name('ar')}}' data-img='{{$cat->img}}' data-toggle='modal' data-target='#edit-modal'><i class='fas fa-edit'></i></button><a href='{{url('dashboard/cats/delete/$cat->id')}}' data-name-en='{{$cat->name('en')}}' data-name-ar='{{$cat->name('ar')}}' data-img='{{$cat->img}}' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a><a href='{{url('dashboard/cats/toggle/$cat->id')}}' class='btn btn-sm btn-secondary'><i class='fas fa-toggle-on'></i></a></td></tr>");
+                // $('#users-table tbody:last-child').append("<tr><td>{{$user->name('en')}}</td><td>{{$user->name('ar')}}</td><td><img src='{{asset('$user->img')}}' height='50px'></td></tr>");
+                $('#users-table').prepend("<tr><td>{{$user->id}}</td><td>{{$user->name('en')}}</td><td>{{$user->name('ar')}}</td><td><img src='{{asset('$user->img')}}' height='50px'></td><td>@if($user->active)<span class='badge bg-success'>yes</span>@else<span class='badge bg-danger'>no</span>@endif</td><td><button type='button' class='btn btn-sm btn-info edit-btn' data-id='{{$user->id}}' data-name-en='{{$user->name('en')}}' data-name-ar='{{$user->name('ar')}}' data-img='{{$user->img}}' data-toggle='modal' data-target='#edit-modal'><i class='fas fa-edit'></i></button><a href='{{url('dashboard/users/delete/$user->id')}}' data-name-en='{{$user->name('en')}}' data-name-ar='{{$user->name('ar')}}' data-img='{{$user->img}}' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a><a href='{{url('dashboard/users/toggle/$user->id')}}' class='btn btn-sm btn-secondary'><i class='fas fa-toggle-on'></i></a></td></tr>");
 
 
             },

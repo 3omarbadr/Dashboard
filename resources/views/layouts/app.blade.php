@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @livewireStyles
 </head>
 <body>
     <div id="app">
@@ -79,5 +80,13 @@
             @yield('content')
         </main>
     </div>
+    {{-- {{$slot}}  --}}
+    @livewireScripts
+
+    <script>
+        window.livewire.on('productAdded', ()=>{
+            $('#add-product').modal('hide');
+        })
+    </script>
 </body>
 </html>
