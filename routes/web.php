@@ -11,6 +11,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ProductController;
 use App\Http\Livewire\Products;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,7 +60,16 @@ Route::prefix('dashboard')->middleware(['lang', 'is-admin'])->group(function () 
 
 
 // livewire Routes
-Route::get('/products', Products::class);
+Route::get('/products', Products::class)->name('products');
+
+// Add-To-Cart Routes
+
+Route::get('cartProducts', [ProductController::class, 'index'])->name('cartProducts');  
+Route::get('cart', [ProductController::class, 'cart'])->name('cart');
+Route::get('add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
+Route::patch('update-cart', [ProductController::class, 'updateCart'])->name('update.cart');
+Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('remove.from.cart');
+
 
 
 Route::get('dashboard/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
