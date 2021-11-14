@@ -55,6 +55,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'news' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/web/news'),
+            'url' => env('APP_URL').'/storage/web/news',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -83,6 +90,7 @@ return [
         public_path('storage') => storage_path('app/public'),
         public_path('storage/cats') => storage_path('app/public/cats'),
         public_path('storage/products') => storage_path('app/public/products'),
+        public_path('storage/web/news') => storage_path('app/public/web/news'),
     ],
 
 ];

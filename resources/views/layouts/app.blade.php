@@ -80,7 +80,6 @@
             @yield('content')
         </main>
     </div>
-    {{$slot}} 
     @livewireScripts
 
     <script>

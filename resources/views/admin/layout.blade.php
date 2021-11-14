@@ -10,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>AdminLTE 3</title>
+    <title>Dashboard</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{asset('admin/css/fontawesome.all.css')}}">
@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{asset('admin/css/adminlte.css')}}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    @yield('styles')
+    {{-- @yield('styles') --}}
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -82,9 +82,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link active">
+                                    <a href="{{url('dashboard/products')}}" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Page one</p>
+                                        <p>
+                                            {{__('web.products')}}
+                                        </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -142,7 +144,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="{{ asset('admin/js/adminlte.js') }}"></script>
 
-    @yield('scripts')
+
+   
 </body>
 
 </html>

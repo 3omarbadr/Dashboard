@@ -1,4 +1,3 @@
-
 <div>
     @include('livewire.create')
     @include('livewire.update')

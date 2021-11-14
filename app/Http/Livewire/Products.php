@@ -23,11 +23,14 @@ class Products extends Component
     public function render()
     {
         $this->data = Product::orderBy('id', 'DESC')->get();
-        return view('livewire.products');
+
+        return view('livewire.products')
+        ->extends('layouts.app');
     }
 
     public function resetInputFields()
     {
+
         $this->name = '';
         $this->description = '';
         $this->price = '';
@@ -36,6 +39,7 @@ class Products extends Component
 
     public function store()
     {
+
         $data = $this->validate([
             'name' => 'required',
             'description' => 'required',

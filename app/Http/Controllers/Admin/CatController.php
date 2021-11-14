@@ -93,7 +93,7 @@ class CatController extends Controller
         return back();
 
         //With ajax
-        return Response::json($cat);
+        // return Response::json($cat);
     }
 
     public function delete(Cat $cat, Request $request)
