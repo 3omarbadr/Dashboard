@@ -10,7 +10,7 @@
             <div class="single-blog">
                 <div class="blog-img thumbnail">
                     <a href="skill.html">
-                        <img src="{{asset('storage/products/'.$product->img)}}" alt="">
+                        <img src="{{asset('storage/products/'.$product->img)}}" style="height: 150px" alt="">
                     </a>
                 </div>
                 <h4>{{ $product->name }}</h4>
