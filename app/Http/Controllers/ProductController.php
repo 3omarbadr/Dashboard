@@ -18,6 +18,13 @@ class ProductController extends Controller
         return view('products.cart');
     }
 
+    public function paymentResponse(Request $request, PaymentController $payment){
+
+        $paymentId = $request->paymentId;
+        $payment->getPaymentStatus($paymentId);
+
+    }
+
 
     public function addToCart($id)
     {

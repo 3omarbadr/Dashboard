@@ -16,6 +16,7 @@
 
     <div class="container">
         <div class="row">
+            {{-- @if(!"{{route('payment')}}") --}}
             <div class="col-lg-12 col-sm-12 col-12 main-section">
                 <div class="dropdown">
                     <a type="button" href="{{route('products')}}" class="btn btn-success">
@@ -57,6 +58,7 @@
                             <a href="{{ route('cart') }}" class="btn btn-primary btn-block">View all</a>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -77,5 +79,6 @@
     @yield('cartScripts')
 
 </body>
+
 
 </html>

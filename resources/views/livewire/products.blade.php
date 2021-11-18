@@ -17,7 +17,7 @@
                     <div class="card-tools">
                         <button type="button" class="btn btn-small btn-primary" data-toggle="modal"
                             data-target="#add-product">Add New Product</button>
-                            <a class="btn btn-small btn-dark" href="{{route('cart')}}" >Add To Cart</a>
+                            <a class="btn btn-small btn-dark" href="{{route('cartProducts')}}" >Add To Cart</a>
                     </div>
                 </div>
                 

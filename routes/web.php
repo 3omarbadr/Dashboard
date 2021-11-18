@@ -11,6 +11,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Livewire\Products;
 use Illuminate\Support\Facades\Auth;
@@ -85,3 +86,10 @@ Route::get('/lang/set/{lang}', [LangController::class, 'set']);
 // News Routes ---- Repository Pattern
 
 Route::get('news', [NewsController::class, 'index']);
+
+
+// Payment Routes 
+
+Route::get('payment/{amount}', [PaymentController::class,'getPayments'])->name('payment');
+Route::post('payment', [PaymentController::class,'processPayment'])->name('payment.process');
+Route::get('response', [ProductController::class, 'paymentResponse'])->name('response');
