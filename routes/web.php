@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\CatController as AdminCatController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
@@ -65,11 +66,11 @@ Route::get('/products', Products::class)->name('products');
 
 // Add-To-Cart Routes
 
-Route::get('cartProducts', [ProductController::class, 'index'])->name('cartProducts');  
-Route::get('cart', [ProductController::class, 'cart'])->name('cart');
-Route::get('add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
-Route::patch('update-cart', [ProductController::class, 'updateCart'])->name('update.cart');
-Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('remove.from.cart');
+Route::get('cartProducts', [CartController::class, 'index'])->name('cartProducts');  
+Route::get('cart', [CartController::class, 'cart'])->name('cart');
+Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
+Route::patch('update-cart', [CartController::class, 'updateCart'])->name('update.cart');
+Route::delete('remove-from-cart', [CartController::class, 'remove'])->name('remove.from.cart');
 
 
 

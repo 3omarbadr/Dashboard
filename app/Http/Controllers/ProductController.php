@@ -7,69 +7,102 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $products = Product::all();
-        return view('products.products', compact('products'));
+
+        $response = [
+            'status' => 1,
+            'message' => 'success',
+            'data' => $products,
+        ];
+
+        return $response;
+         
     }
 
-    public function cart()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        return view('products.cart');
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required',
+            'price' => 'required',
+        ]);
+        return Product::create($request->all());
     }
 
-    public function paymentResponse(Request $request, PaymentController $payment){
-
-        $paymentId = $request->paymentId;
-        $payment->getPaymentStatus($paymentId);
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return Product::findOrFail($id);
     }
 
-
-    public function addToCart($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-          
-        $cart = session()->get('cart', []);
-  
-        if(isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                "name" => $product->name,
-                "quantity" => 1,
-                "price" => $product->price,
-                "img" => $product->img
-            ];
-        }
-           
-        session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Product added to cart successfully!');
+
+        $product->update($request->all());
+
+        return $product;
     }
 
-
-    public function updateCart(Request $request)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
-        if($request->id && $request->quantity){
-            $cart = session()->get('cart');
-            $cart[$request->id]["quantity"] = $request->quantity;
-            session()->put('cart', $cart);
-            session()->flash('success', 'Cart updated successfully');
-        }
+       return Product::destroy($id);
     }
 
-    public function remove(Request $request)
+    /**
+     * Search For a Name
+     *
+     * @param  string  $name
+     * @return \Illuminate\Http\Response
+     */
+    public function search($name)
     {
-        if($request->id) {
-            $cart = session()->get('cart');
-            if(isset($cart[$request->id])) {
-                unset($cart[$request->id]);
-                session()->put('cart', $cart);
-            }
-            session()->flash('success', 'Product removed successfully');
-        }
+       return Product::where('name', 'like', '%'.$name.'%')->get();
     }
 
+    public function searchByPriceRange($minPrice, $maxPrice)
+    {
+        
+       $priceRange = Product::whereBetween('price', [$minPrice, $maxPrice])->get();
+ 
+       $response = [
+        'status' => 1,
+        'message' => 'success',
+        'data' => $priceRange,
+    ];
 
+    return $response;
 
+    }
 }
