@@ -2,91 +2,61 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Cat;
 use Exception;
+use App\Models\Cat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 class CatController extends Controller
 {
     public function index()
     {
-        $data['cats'] = Cat::orderBy('id', 'ASC')->paginate(3);
+        $category = Cat::orderBy('id', 'ASC')->paginate(3);
 
-        return view('admin.cats.index')->with($data);
+        return view('admin.cats.index', compact('category'));
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        // dd($request->all());
-             $request->validate([
-                'name_en' => 'required|string|max:50',
-                'name_ar' => 'required|string|max:50',
-                'img.*' => 'required|image|max:2048|mimes:doc,pdf,docx,zip,jpeg,png,jpg,gif,svg',
-            ]);
+        $path = Storage::disk('cats')->put('/', $request->file('img'));
 
-            $path = Storage::disk('cats')->put('/',$request->file('img'));
-
-
-            // if($request->hasFile('img')){
-            //     $file_name = $request->file('img')->getClientOriginalName();
-            //     $path = $request->file('img')->storeAs('images/cats', $file_name,'cats');   
-            // };
-     
-         //  dd($request->all());
-        Cat::create([
-            'name' => json_encode([
-                'en' => $request->name_en,
-                'ar' => $request->name_ar,
-            ]),
-            'img' => $path,
-        ]);
+        $attributes = $request->validated();
+        $attributes['img'] = $path;
+        Cat::create($attributes);
         $request->session()->flash('msg', 'row added successfuly');
         return back();
 
-        // With ajaxs
+        // With Ajax
 
         // $data = ['success' => 'row added successfuly'];
         // return Response::json($data);
     }
 
-    public function update(Request $request, Cat $cat)
+    public function update(CategoryRequest $request, Cat $cat)
     {
-       
-        $request->validate([
-            'id' => 'required|exists:cats,id',
-            'name_en' => 'required|string|max:50',
-            'name_ar' => 'required|string|max:50',
-            'img.*' => 'nullable|image|max:2048|mimes:doc,pdf,docx,zip,jpeg,png,jpg,gif,svg',
-        ]);
-
-
-        $cat = Cat::findOrFail($request->id);
         $path = $cat->img;
 
-        if($request->hasFile('img')) {
+        if ($request->hasFile('img')) {
             Storage::delete($path);
-            Storage::disk('cats')->put('/',$request->file('img'));
+            Storage::disk('cats')->put('/', $request->file('img'));
         }
-        $cat->update([
-            'name' => json_encode([
-                'en' => $request->name_en,
-                'ar' => $request->name_ar,
-            ]),
-            'img' => $path,
-        ]);
-       
+        $attributes = $request->validated();
+        $attributes['img'] = $path;
+        $cat->update($attributes);
+
         $request->session()->flash('msg', 'row updated successfuly');
         return back();
 
-        // With ajax
+        // With Ajax
         // $data = ['success' => 'row added successfuly'];
         // return Response::json($data);
     }
 
-    public function toggle(Cat $cat){
+    public function toggle(Cat $cat)
+    {
         $cat->update([
             'active' => !$cat->active
         ]);
@@ -106,9 +76,8 @@ class CatController extends Controller
         } catch (Exception $e) {
             $msg = "can't delete this row";
         }
-        
+
         $request->session()->flash('msg', $msg);
         return back();
-        
     }
 }
