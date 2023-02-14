@@ -14,7 +14,8 @@
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
         "livewire/livewire": "^2.7",
-        "spatie/laravel-permission": "^5.1"
+        "spatie/laravel-permission": "^5.1",
+        "symfony/http-kernel": "^6.2"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
